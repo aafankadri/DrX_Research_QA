@@ -1,0 +1,26 @@
+
+Project Structure for Dr. X's Research Q&A System
+This project is designed to create a Research Q&A system for Dr. X, utilizing local LLMs and vector databases. The structure is organized to facilitate easy navigation and understanding of the workflow.
+
+DrX_Research_QA/
+│
+├── data/                      # Store Dr. X's publications
+├── extracted/                 # Store extracted text files
+├── chunks/                   # Store text chunks with metadata
+│
+├── models/                   # For local LLMs or embedding models
+├── vectorstore/              # Local vector DB files
+│
+├── scripts/
+│   ├── 1_extract_text.py     # File extraction from PDFs, DOCX, XLSX, CSV
+│   ├── 2_chunk_text.py       # Tokenize and chunk using cl100k_base
+│   ├── 3_embed_and_store.py  # Embedding + vector DB creation
+│   ├── 4_rag_qa.py           # RAG Q&A system with local LLaMA
+│   ├── 5_translate.py        # Translation tool
+│   ├── 6_summarize.py        # Summarization + ROUGE
+│   └── utils.py              # Utility functions
+│
+├── requirements.txt
+├── README.md
+└── main.ipynb                # Optional: Run the whole flow from notebook
+
