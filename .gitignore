@@ -35,3 +35,8 @@ Thumbs.db
 
 # Output directories
 extracted/
+chunks/
+models/
+summaries/
+translated/
+vectorstore/
