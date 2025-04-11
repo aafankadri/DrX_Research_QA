@@ -1,8 +1,20 @@
 import os
 import json
+import time
+import logging
 from transformers import pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
 from rouge_score import rouge_scorer
 from tqdm import tqdm
+import tiktoken
+
+# --- Logging Setup ---
+log_path = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\performance.log"
+logging.basicConfig(
+    filename=log_path,
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    filemode="a"
+)
 
 CHUNKS_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\chunks"  # or 'translated'
 SUMMARY_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\summaries"
@@ -21,6 +33,10 @@ def summarize_chunks(json_path):
     with open(json_path, "r", encoding="utf-8") as f:
         chunks = json.load(f)
 
+    tokenizer = tiktoken.get_encoding("cl100k_base")
+    total_tokens = 0
+    start = time.time()
+
     summaries = []
     for chunk in chunks:
         text = chunk["text"]
@@ -31,9 +47,21 @@ def summarize_chunks(json_path):
             summary = summarize_text(text)
             chunk["summary"] = summary
             summaries.append(chunk)
+            total_tokens += len(tokenizer.encode(text))
         except Exception as e:
             print(f"Failed to summarize chunk: {e}")
             continue
+    
+    elapsed = time.time() - start
+    tps = total_tokens / elapsed if elapsed > 0 else 0
+
+    log_msg = (
+        f"✂️ Summarization | File: {os.path.basename(json_path)} | "
+        f"{len(summaries)} summaries | {total_tokens} tokens | "
+        f"{elapsed:.2f}s elapsed | {tps:.2f} tokens/sec"
+    )
+    logging.info(log_msg)
+    print(log_msg)
 
     return summaries
 

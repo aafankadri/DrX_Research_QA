@@ -1,8 +1,20 @@
 import os
 import json
+import time
+import logging
 import torch
 from langdetect import detect
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
+import tiktoken
+
+# --- Logging Setup ---
+log_path = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\performance.log"
+logging.basicConfig(
+    filename=log_path,
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    filemode="a"
+)
 
 # --- Config ---
 CHUNKS_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\chunks"
@@ -20,7 +32,6 @@ translator = pipeline("translation", model=model, tokenizer=tokenizer, device=0 
 lang_map = {
     "en": "eng_Latn",
     "ar": "arb_Arab",
-    # fallback for common languages (expandable)
     "fr": "fra_Latn",
     "es": "spa_Latn",
     "hi": "hin_Deva",
@@ -51,7 +62,10 @@ def translate_chunks(json_file, target="en"):
     with open(json_file, "r", encoding="utf-8") as f:
         chunks = json.load(f)
 
+    tokenizer = tiktoken.get_encoding("cl100k_base")
     translated_chunks = []
+    total_tokens = 0
+    start = time.time()
 
     for chunk in chunks:
         original_text = chunk["text"]
@@ -64,9 +78,22 @@ def translate_chunks(json_file, target="en"):
             print(f"Failed to translate chunk: {e}")
             translated = original_text
 
+        total_tokens += len(tokenizer.encode(original_text))
+
         chunk["translated_text"] = translated
         chunk["source_lang"] = detected_lang
         translated_chunks.append(chunk)
+
+    elapsed = time.time() - start
+    tps = total_tokens / elapsed if elapsed > 0 else 0
+
+    log_msg = (
+        f"🌍 Translation | File: {os.path.basename(json_file)} | "
+        f"{len(translated_chunks)} chunks | {total_tokens} tokens | "
+        f"{elapsed:.2f}s elapsed | {tps:.2f} tokens/sec"
+    )
+    logging.info(log_msg)
+    print(log_msg)
 
     return translated_chunks
 
