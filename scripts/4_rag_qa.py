@@ -7,6 +7,16 @@ import time
 import logging
 from sentence_transformers import SentenceTransformer
 from llama_cpp import Llama
+import logging
+
+# Setup Q&A history logging
+qna_log_path = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\qna_history.log"
+logging.basicConfig(
+    filename=qna_log_path,
+    level=logging.INFO,
+    format="%(asctime)s - %(message)s",
+    filemode="a"  # append mode
+)
 
 # --- Logging Setup ---
 log_path = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\performance.log"
@@ -51,8 +61,11 @@ def get_relevant_chunks(query, top_k=TOP_K):
 
 def build_prompt(query, context_chunks):
     context_text = "\n---\n".join([f"{c['text']}" for c in context_chunks])
+    memory = get_conversation_context()
+
     prompt = f"""You are an expert assistant helping to analyze research documents.
 
+{memory}
 Use the following context to answer the user's question. If the answer is not in the context, say you don’t know.
 
 Context:
@@ -85,6 +98,16 @@ def rag_qa(query):
 
     return output['choices'][0]['text'].strip(), context_chunks
 
+# Conversation memory: [(question, answer)]
+conversation_history = []
+
+# Format memory into context
+def get_conversation_context():
+    if not conversation_history:
+        return ""
+    memory = "\n".join([f"Q: {q}\nA: {a}" for q, a in conversation_history[-2:]])  # limit to last 2 exchanges
+    return f"\n\nPrevious Conversation:\n{memory}\n"
+
 # --- Example Usage ---
 if __name__ == "__main__":
     while True:
@@ -92,6 +115,12 @@ if __name__ == "__main__":
         if user_q.lower() == "exit":
             break
         answer, used_chunks = rag_qa(user_q)
+        conversation_history.append((user_q, answer))
+
+        # Log the interaction
+        logging.info(f"\nQ: {user_q}\nA: {answer}\n")
+
+        print("\n🗣️ Question:", user_q)
         print("\n📘 Answer:", answer)
         print("\n📚 Context used:")
         for chunk in used_chunks:
