@@ -1,0 +1,8 @@
+[
+  {
+    "source_file": "sample_data.csv.txt",
+    "page": -1,
+    "chunk_number": 1,
+    "text": "| Name   |   Age |   Score |\n|--------|-------|---------|\n| John   |    23 |      95 |\n| Anna   |    21 |      88 |\n| Mike   |    24 |      91 |"
+  }
+]

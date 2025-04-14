@@ -20,17 +20,21 @@ def extract_text_from_docx(file_path):
         text.append(para.text)
     return "\n".join(text)
 
+def dataframe_to_markdown(df):
+    from tabulate import tabulate
+    return tabulate(df, headers="keys", tablefmt="github", showindex=False)
+
 def extract_text_from_excel(file_path):
     text = []
     excel_data = pd.read_excel(file_path, sheet_name=None)
     for sheet, df in excel_data.items():
-        text.append(f"[Sheet: {sheet}]\n")
-        text.append(df.to_string(index=False))
-    return "\n".join(text)
+        text.append(f"[Sheet: {sheet}]")
+        text.append(dataframe_to_markdown(df))
+    return "\n\n".join(text)
 
 def extract_text_from_csv(file_path):
     df = pd.read_csv(file_path)
-    return df.to_string(index=False)
+    return dataframe_to_markdown(df)
 
 def extract_text(file_path):
     ext = os.path.splitext(file_path)[-1].lower()
