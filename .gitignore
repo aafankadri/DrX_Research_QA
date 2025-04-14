@@ -1,42 +1,56 @@
-# Python cache files
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-*.pyo
-
-# Virtual environment
-env/
-venv/
-
-# IDE-specific files
-.vscode/
-.idea/
-
-# OS-specific files
-.DS_Store
-Thumbs.db
-
-# Logs and temporary files
-*.log
-*.tmp
-*.bak
-*.swp
+*$py.class
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
-# Compiled files
-*.so
-*.dll
-*.dylib
+# Virtual environment
+.env/
+.venv/
+env/
+venv/
+ENV/
+env.bak/
 
-# Environment files
-.env
-*.env
+# IDE & editor folders
+.vscode/
+.idea/
 
-# Output directories
-extracted/
-chunks/
-models/
-summaries/
-translated/
+# Mac & Linux system files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+performance.log
+
+# FAISS index files
+*.faiss
 vectorstore/
+
+# Translated & summarized intermediate files
+translated/
+summaries/
+
+# Document outputs
+*.docx
+*.pdf
+
+# Tokenizer cache / Hugging Face
+~/.cache/
+*.h5
+*.ckpt
+
+# Model files
+*.gguf
+models/
+
+# Pip artifacts
+*.egg-info/
+dist/
+build/
+
+# Datasets or data folders (optional)
+data/
