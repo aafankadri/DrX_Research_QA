@@ -2,8 +2,20 @@ import os
 import faiss
 import json
 import numpy as np
+import tiktoken
+import time
+import logging
 from sentence_transformers import SentenceTransformer
 from llama_cpp import Llama
+
+# --- Logging Setup ---
+log_path = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\performance.log"
+logging.basicConfig(
+    filename=log_path,
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    filemode="a"
+)
 
 # --- Configs ---
 VECTOR_DB_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\vectorstore"
@@ -27,6 +39,9 @@ llm = Llama(
     top_p=0.95,
     verbose=False
 )
+
+# --- Tokenizer for prompt token count ---
+tokenizer = tiktoken.get_encoding("cl100k_base")
 
 def get_relevant_chunks(query, top_k=TOP_K):
     query_vec = embed_model.encode([query]).astype("float32")
@@ -52,7 +67,22 @@ Answer:"""
 def rag_qa(query):
     context_chunks = get_relevant_chunks(query)
     prompt = build_prompt(query, context_chunks)
+
+    # Measure time and tokens
+    prompt_tokens = len(tokenizer.encode(prompt))
+    start = time.time()
     output = llm(prompt, stop=["\n\n", "User:"])
+    elapsed = time.time() - start
+    tps = prompt_tokens / elapsed if elapsed > 0 else 0
+
+    # Log it
+    log_msg = (
+        f"🗣️ RAG Q&A | Query: \"{query[:50]}...\" | "
+        f"{prompt_tokens} tokens | {elapsed:.2f}s elapsed | {tps:.2f} tokens/sec"
+    )
+    logging.info(log_msg)
+    print(log_msg)
+
     return output['choices'][0]['text'].strip(), context_chunks
 
 # --- Example Usage ---
