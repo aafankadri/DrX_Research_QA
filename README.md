@@ -6,6 +6,8 @@ This repository contains my solution to the OSOS AI NLP Technical Challenge. The
 
 ## 📦 Project Structure
 DrX_Research_QA/ 
+│── cache/
+│── charts/
 │── data/   # Store Dr. X's publications 
 ├── chunks/ # Chunked text with metadata 
 ├── extracted/ # Raw extracted text files 
@@ -20,13 +22,17 @@ DrX_Research_QA/
 │   ├── 1_extract_text.py     # File extraction from PDFs, DOCX, XLSX, CSV
 │   ├── 2_chunk_text.py       # Tokenize and chunk using cl100k_base
 │   ├── 3_embed_and_store.py  # Embedding + vector DB creation
-│   ├── 4_rag_qa.py           # RAG Q&A system with local LLaMA
+│   ├── rag_qa.py           # RAG Q&A system with local LLaMA
 │   ├── 5_translate.py        # Translation tool
 │   ├── 6_summarize.py        # Summarization + ROUGE
-│   └── utils.py              # Utility functions
+│   ├── 7_visualize_performance.py 
+│   └── app.py              # Utility functions
 │
+├── .gitignore
 ├── performance.log 
+├── qna_history.log
 ├── README.md 
+├── DrX_AI_Technical_Report.docx
 └── requirements.txt
 
 
@@ -46,6 +52,18 @@ DrX_Research_QA/
 
 ---
 
+### 🔍 Multi-format Extraction
+- Supports `.pdf`, `.docx`, `.csv`, `.xlsx`, `.xls`, `.xlsm`
+- Markdown-style tables using `tabulate` for better chunk context
+
+---
+
+### ✂️ Smart Chunking
+- Uses NLTK for sentence-aware segmentation
+- 500-token limit per chunk with overlap for context retention
+
+---
+
 ## 🧪 Performance Logging
 
 All performance is logged to `performance.log`:
@@ -53,6 +71,16 @@ All performance is logged to `performance.log`:
 - Time taken
 - Tokens per second
 - Per-file and per-query level
+
+- `tokens/sec` logs for Embedding, Translation, Summarization, and RAG
+- Visualized in per-task performance charts (`charts/*.png`)
+
+---
+
+### 💬 Streamlit UI
+- Interactive frontend for live questioning
+- Shows answer and retrieved context
+- Retains memory for follow-up Q&A
 
 ---
 
@@ -79,24 +107,24 @@ All performance is logged to `performance.log`:
     python 1_extract_text.py
     python 2_chunk_text.py
     python 3_embed_and_store.py
-    python 4_rag_qa.py
     python 5_translate.py
     python 6_summarize.py
 
-## 📜 Requirements
+4. Launch RAG Q&A CLI
+python rag_qa_module.py
 
-faiss-cpu
-sentence-transformers
-transformers
-langdetect
-tiktoken
-llama-cpp-python
-rouge-score
-evaluate
-pandas
-python-docx
-openpyxl
-tqdm
+5. Or use Streamlit UI
+streamlit run app.py
+
+## 📈 Performance Charts
+Use this script to generate graphs:
+python 7_visualize_performance.py
+
+## 📦 Model Caching
+All models use local caching with:
+cache_dir="./cache"
+This improves speed and supports full offline execution.
+
 
 
 ## 🧠 Notes
