@@ -15,7 +15,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     filemode="a"  # append to file
-)
+)   
 
 EMBEDDING_MODEL = "nomic-ai/nomic-embed-text-v1"
 CHUNKS_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\chunks"

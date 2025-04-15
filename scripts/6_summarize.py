@@ -84,6 +84,12 @@ def evaluate_rouge(chunks_with_summaries):
         "rouge1": sum(s["rouge1"].fmeasure for s in scores) / len(scores),
         "rougeL": sum(s["rougeL"].fmeasure for s in scores) / len(scores),
     }
+
+    # Log average ROUGE
+    logging.info(
+        f"🔍 ROUGE | Avg ROUGE-1: {avg_scores['rouge1']:.4f} | Avg ROUGE-L: {avg_scores['rougeL']:.4f}"
+    )
+    
     return avg_scores
 
 # --- Main Flow ---
