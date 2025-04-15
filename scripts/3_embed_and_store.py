@@ -20,10 +20,11 @@ logging.basicConfig(
 EMBEDDING_MODEL = "nomic-ai/nomic-embed-text-v1"
 CHUNKS_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\chunks"
 VECTOR_DB_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\vectorstore"
+CACHE_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\cache"
 EMBEDDING_DIM = 768  # Depends on the model used
 
 # Load Nomic model locally (must be available in your HF cache or downloaded)
-model = SentenceTransformer(EMBEDDING_MODEL, trust_remote_code=True)
+model = SentenceTransformer(EMBEDDING_MODEL, trust_remote_code=True, cache_folder=CACHE_DIR)
 
 # Store metadata separately
 metadata_list = []

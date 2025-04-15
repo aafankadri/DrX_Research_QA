@@ -19,12 +19,13 @@ logging.basicConfig(
 # --- Config ---
 CHUNKS_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\chunks"
 TRANSLATED_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\translated"
+CACHE_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\cache"
 os.makedirs(TRANSLATED_DIR, exist_ok=True)
 
 # Load NLLB model
 MODEL_NAME = "facebook/nllb-200-distilled-600M"
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_NAME)
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
+model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_NAME, cache_dir=CACHE_DIR)
 
 translator = pipeline("translation", model=model, tokenizer=tokenizer, device=0 if torch.cuda.is_available() else -1)
 
