@@ -7,8 +7,11 @@ from langdetect import detect
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 import tiktoken
 
+# --- Base Directory ---
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
 # --- Logging Setup ---
-log_path = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\performance.log"
+log_path = os.path.join(BASE_DIR, "performance.log")
 logging.basicConfig(
     filename=log_path,
     level=logging.INFO,
@@ -17,9 +20,9 @@ logging.basicConfig(
 )
 
 # --- Config ---
-CHUNKS_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\chunks"
-TRANSLATED_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\translated"
-CACHE_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\cache"
+CHUNKS_DIR = os.path.join(BASE_DIR, "chunks")
+TRANSLATED_DIR = os.path.join(BASE_DIR, "translated")
+CACHE_DIR = os.path.join(BASE_DIR, "cache")
 os.makedirs(TRANSLATED_DIR, exist_ok=True)
 
 # Load NLLB model

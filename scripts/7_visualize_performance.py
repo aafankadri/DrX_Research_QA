@@ -3,9 +3,10 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 import os
 
-log_file = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\performance.log"
-
-output_dir = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\charts"
+# --- Base Directory Setup ---
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+log_file = os.path.join(BASE_DIR, "performance.log")
+output_dir = os.path.join(BASE_DIR, "charts")
 os.makedirs(output_dir, exist_ok=True)
 
 # Regex to extract:
@@ -35,7 +36,7 @@ for task, tps_values in performance_data.items():
     
     # Save with lowercase filename
     safe_name = task.lower().replace(" ", "_")
-    plt.savefig(f"{output_dir}/{safe_name}_performance.png")
+    plt.savefig(os.path.join(output_dir, f"{safe_name}_performance.png"))
     plt.close()
 
 print("✅ Saved individual charts in 'charts/' folder.")

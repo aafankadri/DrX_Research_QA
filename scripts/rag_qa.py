@@ -7,30 +7,31 @@ import time
 import logging
 from sentence_transformers import SentenceTransformer
 from llama_cpp import Llama
-import logging
 
-# Setup Q&A history logging
-qna_log_path = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\qna_history.log"
-logging.basicConfig(
-    filename=qna_log_path,
-    level=logging.INFO,
-    format="%(asctime)s - %(message)s",
-    filemode="a"  # append mode
-)
+# --- Base Directory Setup ---
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+VECTOR_DB_DIR = os.path.join(BASE_DIR, "vectorstore")
+LLM_MODEL_PATH = os.path.join(BASE_DIR, "models", "llama-2-7b.Q4_K_M.gguf")
+QNA_LOG_PATH = os.path.join(BASE_DIR, "qna_history.log")
+LOG_PATH = os.path.join(BASE_DIR, "performance.log")
 
 # --- Logging Setup ---
-log_path = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\performance.log"
 logging.basicConfig(
-    filename=log_path,
+    filename=LOG_PATH,
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     filemode="a"
 )
 
+# Setup Q&A history logging
+qna_logger = logging.getLogger("qna_logger")
+qna_handler = logging.FileHandler(QNA_LOG_PATH, mode="a", encoding="utf-8")
+qna_handler.setFormatter(logging.Formatter("%(asctime)s - %(message)s"))
+qna_logger.addHandler(qna_handler)
+qna_logger.setLevel(logging.INFO)
+
 # --- Configs ---
-VECTOR_DB_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\vectorstore"
 TOP_K = 5
-LLM_MODEL_PATH = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\models\llama-2-7b.Q4_K_M.gguf"  # adjust based on your model
 
 # --- Load vector index and metadata ---
 index = faiss.read_index(os.path.join(VECTOR_DB_DIR, "index.faiss"))
@@ -118,7 +119,7 @@ if __name__ == "__main__":
         conversation_history.append((user_q, answer))
 
         # Log the interaction
-        logging.info(f"\nQ: {user_q}\nA: {answer}\n")
+        qna_logger.info(f"\nQ: {user_q}\nA: {answer}\n")
 
         print("\n🗣️ Question:", user_q)
         print("\n📘 Answer:", answer)

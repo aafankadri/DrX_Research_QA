@@ -7,18 +7,20 @@ from rouge_score import rouge_scorer
 from tqdm import tqdm
 import tiktoken
 
+# --- Base Directory Setup ---
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+LOG_PATH = os.path.join(BASE_DIR, "performance.log")
+CHUNKS_DIR = os.path.join(BASE_DIR, "chunks")  # or 'translated'
+SUMMARY_DIR = os.path.join(BASE_DIR, "summaries")
+os.makedirs(SUMMARY_DIR, exist_ok=True)
+
 # --- Logging Setup ---
-log_path = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\performance.log"
 logging.basicConfig(
-    filename=log_path,
+    filename=LOG_PATH,
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     filemode="a"
 )
-
-CHUNKS_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\chunks"  # or 'translated'
-SUMMARY_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\summaries"
-os.makedirs(SUMMARY_DIR, exist_ok=True)
 
 # Load summarization model (e.g., BART or T5)
 model_name = "facebook/bart-large-cnn"

@@ -83,47 +83,12 @@ def process_extracted_text(file_path):
 
     return chunks_metadata
 
-# def process_extracted_text(file_path):
-#     filename = os.path.basename(file_path)
-#     with open(file_path, "r", encoding="utf-8") as f:
-#         text = f.read()
-
-#     # Optional: Try to track pages
-#     pages = text.split("[Page ")
-#     chunks_metadata = []
-
-#     for page_block in pages:
-#         if not page_block.strip():
-#             continue
-
-#         if page_block.startswith("1]"):
-#             page_num = 1
-#             page_text = page_block[2:]
-#         else:
-#             try:
-#                 page_num = int(page_block.split("]")[0])
-#                 page_text = page_block.split("]", 1)[1]
-#             except:
-#                 page_num = -1
-#                 page_text = page_block
-
-#         tokens = tokenize_text(page_text)
-#         token_chunks = chunk_tokens(tokens)
-
-#         for i, chunk_tokens_ in enumerate(token_chunks):
-#             chunk_text = detokenize(chunk_tokens_)
-#             chunks_metadata.append({
-#                 "source_file": filename,
-#                 "page": page_num,
-#                 "chunk_number": i + 1,
-#                 "text": chunk_text
-#             })
-
-#     return chunks_metadata
-
 if __name__ == "__main__":
-    input_dir = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\extracted"
-    output_dir = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\chunks"
+    # Dynamically set input and output directories
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # One directory above the script
+    input_dir = os.path.join(base_dir, "extracted")  # 'extracted' directory
+    output_dir = os.path.join(base_dir, "chunks")  # 'chunks' directory
+
     os.makedirs(output_dir, exist_ok=True)
 
     for filename in os.listdir(input_dir):

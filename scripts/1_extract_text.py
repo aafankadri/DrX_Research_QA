@@ -51,8 +51,11 @@ def extract_text(file_path):
 
 # Example usage
 if __name__ == "__main__":
-    input_dir = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\data"
-    output_dir = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\extracted"
+    # Dynamically set input and output directories
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # One directory above the script
+    input_dir = os.path.join(base_dir, "data")  # 'data' directory
+    output_dir = os.path.join(base_dir, "extracted")  # 'extracted' directory
+
     os.makedirs(output_dir, exist_ok=True)
 
     for filename in os.listdir(input_dir):

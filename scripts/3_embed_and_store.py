@@ -8,8 +8,11 @@ import time
 import tiktoken
 import logging
 
+# Determine base directory (one directory up from the current script)
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
 # Setup logging
-log_path = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\performance.log"
+log_path = os.path.join(BASE_DIR, "performance.log")
 logging.basicConfig(
     filename=log_path,
     level=logging.INFO,
@@ -18,9 +21,9 @@ logging.basicConfig(
 )   
 
 EMBEDDING_MODEL = "nomic-ai/nomic-embed-text-v1"
-CHUNKS_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\chunks"
-VECTOR_DB_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\vectorstore"
-CACHE_DIR = r"C:\MarkyticsProjectCode\osos\DrX_Research_QA\cache"
+CHUNKS_DIR = os.path.join(BASE_DIR, "chunks")
+VECTOR_DB_DIR = os.path.join(BASE_DIR, "vectorstore")
+CACHE_DIR = os.path.join(BASE_DIR, "cache")
 EMBEDDING_DIM = 768  # Depends on the model used
 
 # Load Nomic model locally (must be available in your HF cache or downloaded)
